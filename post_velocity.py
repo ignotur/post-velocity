@@ -164,7 +164,7 @@ def find_theta_max (meas, vt, D):
     return sumv
 
 
-def compl_post (vt, meas, Rsun, hz, hr):
+def compl_post (vt, meas, Rsun, hz, hr, sigma):
 
     mu_alpha_ap, sigma_mualpha, mu_delta_ap, sigma_mudelta, varpi, sigma_varpi, gl, gb = meas
 
@@ -175,7 +175,7 @@ def compl_post (vt, meas, Rsun, hz, hr):
 
     kappa = find_theta_max (meas, vt, D)
 
-    prior_v = prior_vt (vt, 1000.0)
+    prior_v = prior_vt (vt, sigma)
 
     res = fDv * gv * prior_v * kappa
 
@@ -183,7 +183,7 @@ def compl_post (vt, meas, Rsun, hz, hr):
 
 
 
-def  compute_posterior (meas, Rsun = 8.34, hz = 0.33, hr = 1.70, min_vt = 10, max_vt = 2500, n_step = 100):
+def  compute_posterior (meas, Rsun = 8.34, hz = 0.33, hr = 1.70, min_vt = 10, max_vt = 2500, n_step = 100, sigma = 1000):
 
     vtl = []
     pvtl = []
@@ -210,6 +210,9 @@ def  compute_posterior (meas, Rsun = 8.34, hz = 0.33, hr = 1.70, min_vt = 10, ma
     if hr <= 0:
         print ('Error: exponential radius hr can only be positive')
         return [0,0,0,0,0]
+    if sigma <= 0:
+        print ('Error: velocity prior parameter sigma must be positive')
+        return [0,0,0,0,0]
     
 
     for i in range (0, n_step):
@@ -217,7 +220,7 @@ def  compute_posterior (meas, Rsun = 8.34, hz = 0.33, hr = 1.70, min_vt = 10, ma
         vt = min_vt + step * i
 
         vtl.append  (vt)
-        pvtl.append (compl_post (vt, meas, Rsun, hz, hr))
+        pvtl.append (compl_post (vt, meas, Rsun, hz, hr, sigma))
 
     pvtl = np.asarray (pvtl) / np.max(pvtl)
 
