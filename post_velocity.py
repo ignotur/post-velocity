@@ -183,14 +183,38 @@ def compl_post (vt, meas, Rsun, hz, hr):
 
 
 
-def  compute_posterior (meas, Rsun = 8.34, hz = 0.33, hr = 1.70):
+def  compute_posterior (meas, Rsun = 8.34, hz = 0.33, hr = 1.70, min_vt = 10, max_vt = 2500, n_step = 100):
 
     vtl = []
     pvtl = []
 
-    for i in range (0, 1250):
+    step = abs(max_vt - min_vt) / float(n_step)
 
-        vt = 10.0 + 2.0 * i
+    ## Let us try to catch errors here
+    if (min_vt < 0) or (max_vt < 0):
+        print ('Error: vt can only be positive.')
+        print ('Please set min_vt and max_vt at values greater than 0')
+        return [0,0,0,0,0]
+    if n_step <= 0:
+        print ('Error: n_step has to be positive and integer')
+        return [0,0,0,0,0]
+
+    if abs(Rsun - 8.5) > 3:
+        print ('Warning: Rsun value is weird: ', Rsun)
+        print ('Recommended value is 8.34 kpc')
+
+    if hz <= 0:
+        print ('Error: exponential hight hz can only be positive')
+        return [0,0,0,0,0]
+
+    if hr <= 0:
+        print ('Error: exponential radius hr can only be positive')
+        return [0,0,0,0,0]
+    
+
+    for i in range (0, n_step):
+
+        vt = min_vt + step * i
 
         vtl.append  (vt)
         pvtl.append (compl_post (vt, meas, Rsun, hz, hr))
