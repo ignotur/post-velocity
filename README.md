@@ -12,7 +12,7 @@ The parallax measurements are often have limited accuracy especially for distanc
 
 The example can be found in example.py
 
-`
+```
 from post_velocity import *
 
 parallax = 1.3616973828503283
@@ -38,7 +38,7 @@ plt.ylim([0,1.02])
 plt.savefig ('posterior_vt.pdf')
 plt.show()
 
-`
+```
 
 
 ## References
