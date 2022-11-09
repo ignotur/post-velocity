@@ -10,7 +10,8 @@ The parallax measurements are often have limited accuracy especially for distanc
 
 ## Simple usage
 
-The example can be found in example.py
+A simple example can be found in example.py. In this code I use parallax and proper motion measurements for Gaia DR3 5703888058542880896.
+Parallax is given in milliarcseconds and proper motion is in milliarcseconds per year.
 
 ```
 from post_velocity import *
@@ -39,6 +40,10 @@ plt.savefig ('posterior_vt.pdf')
 plt.show()
 
 ```
+
+This code produces the following figure.
+
+![Posterior velocity distribution for Gaia DR3 5703888058542880896](https://github.com/ignotur/post-velocity/blob/main/resources/posterior_vt.jpg?raw=true)
 
 
 ## References
