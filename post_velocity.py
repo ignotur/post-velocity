@@ -168,6 +168,12 @@ def compl_post (vt, meas, Rsun, hz, hr, sigma):
 
     mu_alpha_ap, sigma_mualpha, mu_delta_ap, sigma_mudelta, varpi, sigma_varpi, gl, gb = meas
 
+    ## Catching possible errors related to the cases when proper motion is not well measured
+
+    if (abs(mu_alpha_ap / sigma_mualpha) < 6) or (abs(mu_delta_ap / sigma_mudelta) < 6):
+        print ('Error: code works reliably when proper motion is well-measured i.e. pmra / pmra_error > 6 and pmdec / pmdec_error > 6')
+        sys.exit(1)
+
     D = vt / ( 4.74 * sqrt(mu_alpha_ap ** 2.0 + mu_delta_ap ** 2.0))
 
     fDv = fD (D, gl, gb, hz, hr, Rsun)
@@ -213,6 +219,8 @@ def  compute_posterior (meas, Rsun = 8.34, hz = 0.33, hr = 1.70, min_vt = 10, ma
     if sigma <= 0:
         print ('Error: velocity prior parameter sigma must be positive')
         return [0,0,0,0,0]
+
+
     
 
     for i in range (0, n_step):
