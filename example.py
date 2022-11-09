@@ -1,5 +1,3 @@
-from math import *
-import numpy as np
 from post_velocity import *
 
 parallax = 1.3616973828503283

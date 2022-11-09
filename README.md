@@ -1,5 +1,6 @@
 # post-velocity
-Package to compute Bayesian posterior distribution for transversal velocity using parallaxes and proper motions
+Package to compute Bayesian posterior distribution for transversal velocity using parallaxes and proper motions.
+Code is designed for the cases when the parallax uncertainty is significant while proper motion is measured significantly better.
 
 ## Introduction
 
@@ -41,10 +42,54 @@ plt.show()
 
 ```
 
-This code produces the following figure.
+This code produces the following image. The red dashed lines show the five percent credible interval. The red solid line shows median of the posterior distribution. 
 
 ![Posterior velocity distribution for Gaia DR3 5703888058542880896](https://github.com/ignotur/post-velocity/blob/main/resources/posterior_vt.jpg?raw=true)
 
+## Varying parameters of priors
+
+The basic function `compute_posterior (meas, Rsun = 8.34, hz = 0.33, hr = 1.70, min_vt = 10, max_vt = 2500, n_step = 100, sigma = 1000)` allows varying parameters of all priors involved in the calculations. Below I show how to change parameters of the velocity prior:
+
+```
+from post_velocity import *
+
+parallax = 1.3616973828503283   ## mas
+parallax_error = 0.31826717     ## mas
+pmra = 70.22832802893967        ## mas/year
+pmra_error = 0.31611034         ## mas/year
+pmdec = -195.65413513344822     ## mas/year
+pmdec_error = 0.2825489         ## mas/year
+l = radians(245.99334300224004) ## degrees to be converted to radians while working with the package
+b = radians(13.599432251899845) ## degrees to be converted to radians while working with the package
+
+meas = pmra, pmra_error, pmdec, pmdec_error, parallax, parallax_error, l, b
+
+## Posterior will be computed for the velocity range from min_vt to max_vt
+min_vt = 30   ## km/s
+max_vt = 3000 ## km/s
+
+## Vary velocity prior
+sigma1000 = 1000.0 ## km/s
+sigma3000 = 3000.0 ## km/s
+
+vtl1, pvtl1, idx025, idx50, idx975 = compute_posterior (meas, min_vt=min_vt, max_vt=max_vt, sigma=sigma1000)
+vtl3, pvtl3, idx025, idx50, idx975 = compute_posterior (meas, min_vt=min_vt, max_vt=max_vt, sigma=sigma3000)
+
+plt.plot (vtl1, pvtl1, 'k-', label=r'$\sigma=1000$ km/s')
+plt.plot (vtl3, pvtl3, 'b--', label=r'$\sigma=3000$ km/s')
+
+plt.xlabel(r'$v_t$ (km/s)')
+plt.ylabel(r'Probability density')
+plt.ylim([0,1.02])
+plt.legend()
+plt.savefig ('posterior_vt_sigma.pdf')
+plt.show()
+
+```
+
+We show the result below.
+
+![Posterior velocity distribution for Gaia DR3 5703888058542880896 varying velocity priors](https://github.com/ignotur/post-velocity/blob/main/resources/posterior_vt_sigma.jpg?raw=true)
 
 ## References
 
