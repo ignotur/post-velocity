@@ -52,7 +52,7 @@ def fD (D, gl, gb, hz, hr, Rsun):
 
 ## Conditional probability to measure parallax if distance is fixed
 ## More details can be found in Igoshev, Verbunt & Cator (2016) A&A, 591, A123, 10
-## and in Igoshev & Perets (2022) ArXiv: 2209.09915
+## and in Igoshev, Perets & Hallakoun (2022) ArXiv: 2209.09915
 def g (D, varpi, sigma_varpi):
 
     res = 1.0 / sqrt(2.0 * pi) / sigma_varpi * exp (- (1.0 / D - varpi)**2.0 / 2.0 / sigma_varpi**2.0)
