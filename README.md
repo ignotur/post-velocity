@@ -1,6 +1,6 @@
 # post-velocity
 Package to compute Bayesian posterior distribution for transversal velocity using parallaxes and proper motions.
-Code is designed for the cases when the parallax uncertainty is significant while proper motion is measured significantly better.
+Code is designed for the cases when the parallax uncertainty is significant while proper motion is measured with greater precision.
 
 ## Introduction
 
