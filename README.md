@@ -8,6 +8,15 @@ The transversal velocities of stars are important in many astrophysical applicat
 These velocities are often computed using measured parallaxes and proper motions of stars.
 The parallax measurements are often have limited accuracy especially for distances of a few kpc.
 
+## Installation
+
+The package is available at pypi so it can be installed using pip:
+
+```
+pip install post_velocity
+```
+Examples of the usage are available in folder examples.
+
 
 ## Simple usage
 
@@ -15,19 +24,21 @@ A simple example can be found in example.py. In this code I use parallax and pro
 Parallax is given in milliarcseconds and proper motion is in milliarcseconds per year.
 
 ```
-from post_velocity import *
+from post_velocity import post_velocity
+from math import *
+import matplotlib.pyplot as plt
 
-parallax = 1.3616973828503283   ## mas
-parallax_error = 0.31826717     ## mas
-pmra = 70.22832802893967        ## mas/year
-pmra_error = 0.31611034         ## mas/year
-pmdec = -195.65413513344822     ## mas/year
-pmdec_error = 0.2825489         ## mas/year
-l = radians(245.99334300224004) ## degrees to be converted to radians while working with the package
-b = radians(13.599432251899845) ## degrees to be converted to radians while working with the package
+parallax = 1.3616973828503283
+parallax_error = 0.31826717
+pmra = 70.22832802893967
+pmra_error = 0.31611034
+pmdec = -195.65413513344822
+pmdec_error = 0.2825489
+l = radians(245.99334300224004)
+b = radians(13.599432251899845) 
 
 meas = pmra, pmra_error, pmdec, pmdec_error, parallax, parallax_error, l, b
-vtl, pvtl, idx025, idx50, idx975 = compute_posterior (meas)
+vtl, pvtl, idx025, idx50, idx975 = post_velocity.compute_posterior (meas)
 
 plt.plot (vtl, pvtl)
 plt.plot ([vtl[idx025], vtl[idx025]], [-0.5,1.1], 'r--')
@@ -51,7 +62,9 @@ This code produces the following image. The red dashed lines show the five perce
 The basic function `compute_posterior (meas, Rsun = 8.34, hz = 0.33, hr = 1.70, min_vt = 10, max_vt = 2500, n_step = 100, sigma = 1000)` allows varying parameters of all priors involved in the calculations. Below I show how to change parameters of the velocity prior:
 
 ```
-from post_velocity import *
+from post_velocity import post_velocity
+from math import *
+import matplotlib.pyplot as plt
 
 parallax = 1.3616973828503283   ## mas
 parallax_error = 0.31826717     ## mas
@@ -72,8 +85,8 @@ max_vt = 3000 ## km/s
 sigma1000 = 1000.0 ## km/s
 sigma3000 = 3000.0 ## km/s
 
-vtl1, pvtl1, idx025, idx50, idx975 = compute_posterior (meas, min_vt=min_vt, max_vt=max_vt, sigma=sigma1000)
-vtl3, pvtl3, idx025, idx50, idx975 = compute_posterior (meas, min_vt=min_vt, max_vt=max_vt, sigma=sigma3000)
+vtl1, pvtl1, idx025, idx50, idx975 = post_velocity.compute_posterior (meas, min_vt=min_vt, max_vt=max_vt, sigma=sigma1000)
+vtl3, pvtl3, idx025, idx50, idx975 = post_velocity.compute_posterior (meas, min_vt=min_vt, max_vt=max_vt, sigma=sigma3000)
 
 plt.plot (vtl1, pvtl1, 'k-', label=r'$\sigma=1000$ km/s')
 plt.plot (vtl3, pvtl3, 'b--', label=r'$\sigma=3000$ km/s')
@@ -97,7 +110,10 @@ The package also provide functions `fD (D, gl, gb, hz, hr, Rsun)` and `g (D, var
 
 ```
 
-from post_velocity import *
+from post_velocity import post_velocity
+from math import *
+import matplotlib.pyplot as plt
+import numpy as np
 
 parallax = 1.3616973828503283   ## mas
 parallax_error = 0.31826717     ## mas
@@ -116,7 +132,7 @@ Rsun = 8.34 ## kpc
 
 meas = pmra, pmra_error, pmdec, pmdec_error, parallax, parallax_error, l, b
 
-vtl, pvtl, idx025, idx50, idx975 = compute_posterior (meas, Rsun = Rsun, hz = hz, hr = hr)
+vtl, pvtl, idx025, idx50, idx975 = post_velocity.compute_posterior (meas, Rsun = Rsun, hz = hz, hr = hr)
 
 
 varpi = parallax
@@ -132,8 +148,8 @@ for k in range (1, 10000):
     d = 0.001 * k
 
     dl.append (d)
-    ggl.append (g (d, varpi, sigma_varpi))  ## 
-    ffl.append (fD (d, l, b, hz, hr, Rsun)) ## Galactic prior for distances
+    ggl.append (post_velocity.g (d, varpi, sigma_varpi))  ## 
+    ffl.append (post_velocity.fD (d, l, b, hz, hr, Rsun)) ## Galactic prior for distances
 
 ggl = np.asarray(ggl) / np.max(ggl)
 ffl = np.asarray(ffl) / np.max(ffl)
