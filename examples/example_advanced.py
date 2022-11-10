@@ -1,4 +1,6 @@
-from post_velocity import *
+from post_velocity import post_velocity
+from math import *
+import matplotlib.pyplot as plt
 
 parallax = 1.3616973828503283   ## mas
 parallax_error = 0.31826717     ## mas
@@ -19,8 +21,8 @@ max_vt = 3000 ## km/s
 sigma1000 = 1000.0 ## km/s
 sigma3000 = 3000.0 ## km/s
 
-vtl1, pvtl1, idx025, idx50, idx975 = compute_posterior (meas, min_vt=min_vt, max_vt=max_vt, sigma=sigma1000)
-vtl3, pvtl3, idx025, idx50, idx975 = compute_posterior (meas, min_vt=min_vt, max_vt=max_vt, sigma=sigma3000)
+vtl1, pvtl1, idx025, idx50, idx975 = post_velocity.compute_posterior (meas, min_vt=min_vt, max_vt=max_vt, sigma=sigma1000)
+vtl3, pvtl3, idx025, idx50, idx975 = post_velocity.compute_posterior (meas, min_vt=min_vt, max_vt=max_vt, sigma=sigma3000)
 
 plt.plot (vtl1, pvtl1, 'k-', label=r'$\sigma=1000$ km/s')
 plt.plot (vtl3, pvtl3, 'b--', label=r'$\sigma=3000$ km/s')

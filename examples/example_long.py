@@ -1,4 +1,7 @@
-from post_velocity import *
+from post_velocity import post_velocity
+from math import *
+import matplotlib.pyplot as plt
+import numpy as np
 
 parallax = 1.3616973828503283   ## mas
 parallax_error = 0.31826717     ## mas
@@ -17,7 +20,7 @@ Rsun = 8.34 ## kpc
 
 meas = pmra, pmra_error, pmdec, pmdec_error, parallax, parallax_error, l, b
 
-vtl, pvtl, idx025, idx50, idx975 = compute_posterior (meas, Rsun = Rsun, hz = hz, hr = hr)
+vtl, pvtl, idx025, idx50, idx975 = post_velocity.compute_posterior (meas, Rsun = Rsun, hz = hz, hr = hr)
 
 
 varpi = parallax
@@ -33,8 +36,8 @@ for k in range (1, 10000):
     d = 0.001 * k
 
     dl.append (d)
-    ggl.append (g (d, varpi, sigma_varpi))  ## 
-    ffl.append (fD (d, l, b, hz, hr, Rsun)) ## Galactic prior for distances
+    ggl.append (post_velocity.g (d, varpi, sigma_varpi))  ## 
+    ffl.append (post_velocity.fD (d, l, b, hz, hr, Rsun)) ## Galactic prior for distances
 
 ggl = np.asarray(ggl) / np.max(ggl)
 ffl = np.asarray(ffl) / np.max(ffl)

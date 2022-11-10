@@ -1,4 +1,6 @@
-from post_velocity import *
+from post_velocity import post_velocity
+from math import *
+import matplotlib.pyplot as plt
 
 parallax = 1.3616973828503283
 parallax_error = 0.31826717
@@ -10,7 +12,7 @@ l = radians(245.99334300224004)
 b = radians(13.599432251899845) 
 
 meas = pmra, pmra_error, pmdec, pmdec_error, parallax, parallax_error, l, b
-vtl, pvtl, idx025, idx50, idx975 = compute_posterior (meas)
+vtl, pvtl, idx025, idx50, idx975 = post_velocity.compute_posterior (meas)
 
 plt.plot (vtl, pvtl)
 plt.plot ([vtl[idx025], vtl[idx025]], [-0.5,1.1], 'r--')
